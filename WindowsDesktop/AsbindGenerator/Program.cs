@@ -16,10 +16,14 @@ internal static class Program
             return;
         }
 
-        var someFile = Path.Combine(repositoryRoot, "Siv3D/include/Siv3D/Texture.hpp");
-        var content = File.ReadAllText(someFile);
+        var headerFile = Path.Combine(repositoryRoot, "Siv3D/include/Siv3D.hpp");
+        var headerContent = File.ReadAllText(headerFile);
 
-        var parseOption = new CppParserOptions().ConfigureForWindowsMsvc();
+        var parseOption =
+            new CppParserOptions().ConfigureForWindowsMsvc(CppTargetCpu.X86_64, (CppVisualStudioVersion)1943);
+
+        parseOption.AdditionalArguments.Add("-std=c++20");
+
         parseOption.IncludeFolders.AddRange([
             Path.Combine(repositoryRoot, "Siv3D/include"),
             Path.Combine(repositoryRoot, "Siv3D/include/ThirdParty"),
@@ -34,29 +38,22 @@ internal static class Program
             Path.Combine(repositoryRoot, "Dependencies/boost_1_83_0"),
 
             Path.Combine(repositoryRoot, "Siv3D/include/Siv3D"), // ?
+            Path.Combine(repositoryRoot, "WindowsDesktop/AsbindGenerator/dummy"), // ?
         ]);
 
         // Parse a C++ files
-        var compilation = CppParser.Parse(content, parseOption);
+        var compilation = CppParser.Parse(headerContent, parseOption);
 
-        // Print diagnostic messages
-        foreach (var message in compilation.Diagnostics.Messages)
-            Console.WriteLine(message);
+        var s3d = compilation.Namespaces.First(n => n.Name == "s3d");
+        if (s3d == null)
+        {
+            Console.WriteLine("Could not find the s3d namespace.");
+            return;
+        }
 
-        // Print All enums
-        foreach (var cppEnum in compilation.Enums)
-            Console.WriteLine(cppEnum);
-
-        // Print All functions
-        foreach (var cppFunction in compilation.Functions)
-            Console.WriteLine(cppFunction);
-
-        // Print All classes, structs
-        foreach (var cppClass in compilation.Classes)
-            Console.WriteLine(cppClass);
-
-        // Print All typedefs
-        foreach (var cppTypedef in compilation.Typedefs)
-            Console.WriteLine(cppTypedef);
+        foreach (var class_ in s3d.Classes)
+        {
+            Console.WriteLine(class_);
+        }
     }
 }
