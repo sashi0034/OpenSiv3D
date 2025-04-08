@@ -1,4 +1,5 @@
-﻿using CppAst;
+﻿using System.Text;
+using CppAst;
 
 namespace AsbindGenerator;
 
@@ -37,7 +38,6 @@ internal static class Program
             Path.Combine(repositoryRoot, "Siv3D/src/ThirdParty-prebuilt"),
             Path.Combine(repositoryRoot, "Dependencies/boost_1_83_0"),
 
-            Path.Combine(repositoryRoot, "Siv3D/include/Siv3D"), // ?
             Path.Combine(repositoryRoot, "WindowsDesktop/AsbindGenerator/dummy"), // ?
         ]);
 
@@ -51,9 +51,20 @@ internal static class Program
             return;
         }
 
+        var sb = new StringBuilder();
         foreach (var class_ in s3d.Classes)
         {
-            Console.WriteLine(class_);
+            sb.AppendLine($"{class_.FullName}");
+            foreach (var function in class_.Functions)
+            {
+                sb.AppendLine(
+                    $"    {function.Name}({string.Join(", ", function.Parameters.Select(p => p.Type.ToString()))})");
+            }
         }
+
+        var outputFile = Path.Combine(repositoryRoot, "WindowsDesktop/AsbindGenerator/output.txt");
+        File.WriteAllText(outputFile, sb.ToString());
+
+        Console.WriteLine(sb.ToString());
     }
 }
