@@ -10,7 +10,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Siv3D-Test", "Siv3D-Test.vc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Siv3D", "Siv3D.vcxproj", "{ECB3862D-B2E1-4B39-9DCF-A9E4927F1F16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsbindGenerator", "..\..\AsbindGenerator\AsbindGenerator.csproj", "{DB4D008A-E0CD-47F7-A487-927BC2ADE093}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BindingGenerator", "..\..\BindingGenerator\BindingGenerator.csproj", "{DB4D008A-E0CD-47F7-A487-927BC2ADE093}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
